@@ -17,7 +17,7 @@ exports.GetAll = async (req, res) => {
         (message = respOrm.err.message),
         (statuscode = enum_.CODE_BAD_REQUEST);
     } else {
-      (message = 'Success GetAll movies'),
+      (message = 'Success GetAll user'),
         (data = respOrm),
         (statuscode = data.length > 0 ? enum_.CODE_OK : enum_.CODE_NO_CONTENT);
     }
