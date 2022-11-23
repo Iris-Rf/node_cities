@@ -49,10 +49,17 @@ exports.Create = async (req, res) => {
     const Password = req.body.password;
     const Avatar = req.body.avatar;
     const Role = req.body.role;
-    const Comments = req.body.comments;
-   
-    if (Name && Nickname && Email && Password && Avatar && Role && Comments) {
-      let respOrm = await ormUser.Create(Name, Nickname, Email, Password, Avatar, Role, Comments);
+    /* const Comments = req.body.comments; */
+
+    if (Name && Nickname && Email && Password && Avatar && Role) {
+      let respOrm = await ormUser.Create(
+        Name,
+        Nickname,
+        Email,
+        Password,
+        Avatar,
+        Role
+      );
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),

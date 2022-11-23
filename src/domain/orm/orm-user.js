@@ -18,8 +18,8 @@ exports.Create = async (
   Email,
   Password,
   Avatar,
-  Role,
-  Comments
+  Role
+  /* Comments */
 ) => {
   try {
     const data = await new conn.db.connMongo.User({
@@ -29,7 +29,7 @@ exports.Create = async (
       password: Password,
       avatar: Avatar,
       role: Role,
-      comments: Comments,
+      /*  comments: Comments, */
     });
     data.save();
     return true;
