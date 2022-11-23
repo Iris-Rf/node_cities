@@ -8,7 +8,7 @@ module.exports = (db) => {
       email: { type: String, required: true, unique: true },
       password: { type: String },
       avatar: { type: String },
-      role: { type: String, default: normal },
+      role: { type: String, default: "normal" },
       comments: [{ type: db.Schema.Types.ObjectId, ref: 'Comments' }],
     },
     {
