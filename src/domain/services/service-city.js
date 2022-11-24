@@ -35,6 +35,7 @@ exports.GetAll = async (req, res) => {
   }
 };
 
+// create
 exports.Create = async (req, res) => {
   let status = 'Success',
     errorcode = '',
@@ -49,10 +50,17 @@ exports.Create = async (req, res) => {
     const mapImage = req.body.mapImage;
     const history = req.body.history;
     const places = req.body.places;
-   
+
     // Verificar si deben ir todos las variables o únicamente las requeridas
     if (name && country && population && mapImage && history && places) {
-      let respOrm = await ormCity.Create(name, country, population, mapImage, history, places);
+      let respOrm = await ormCity.Create(
+        name,
+        country,
+        population,
+        mapImage,
+        history,
+        places
+      );
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),
@@ -66,6 +74,96 @@ exports.Create = async (req, res) => {
         (errorcode = enum_.ERROR_REQUIRED_FIELD),
         (message = 'All fields are required'),
         (statuscode = enum_.CODE_BAD_REQUEST);
+    }
+    response = await magic.ResponseService(status, errorcode, message, data);
+    return res.status(statuscode).send(response);
+  } catch (err) {
+    console.log('err = ', err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService('Failure', enum_.CRASH_LOGIC, 'err', '')
+      );
+  }
+};
+
+//DELETE
+exports.Delete = async (req, res) => {
+  let status = 'Success',
+    errorcode = '',
+    message = '',
+    data = '',
+    statuscode = 0,
+    response = {};
+  try {
+    const { id } = req.params;
+
+    if (id) {
+      let respOrm = await ormCity.Delete(id);
+      console.log(respOrm);
+      if (respOrm.err) {
+        (status = 'Failure'),
+          (errorcode = respOrm.err.code),
+          (message = respOrm.err.messsage),
+          (statuscode = enum_.CODE_BAD_REQUEST);
+      } else {
+        (message = 'City deleted'), (statuscode = enum_.CODE_OK);
+      }
+    } else {
+      (status = 'Failure'),
+        (errorcode = enum_.ERROR_REQUIRED_FIELD), //este error no cuadra
+        (message = 'id does not exist'),
+        (statuscode = enum_.CODE_UNPROCESSABLE_ENTITY);
+    }
+    response = await magic.ResponseService(status, errorcode, message, data);
+    return res.status(statuscode).send(response);
+  } catch (err) {
+    console.log('err = ', err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService('Failure', enum_.CRASH_LOGIC, 'err', '')
+      );
+  }
+};
+
+// Update
+exports.Update = async (req, res) => {
+  let status = 'Success',
+    errorcode = '',
+    message = '',
+    data = '',
+    statuscode = 0,
+    response = {};
+  try {
+    const { id } = req.params;
+
+    const updatedCity = {
+      name: req.body.name,
+      country: req.body.country,
+      population: req.body.population,
+      mapImage: req.body.mapImage,
+      history: req.body.history,
+      places: req.body.places,
+      _id: id,
+    };
+
+    if (id) {
+      let respOrm = await ormCity.Update(id, updatedCity);
+      console.log(respOrm);
+      if (respOrm.err) {
+        (status = 'Failure'),
+          (errorcode = respOrm.err.code),
+          (message = respOrm.err.messsage),
+          (statuscode = enum_.CODE_BAD_REQUEST);
+      } else {
+        (message = 'City updated'), (statuscode = enum_.CODE_OK);
+      }
+    } else {
+      (status = 'Failure'),
+        (errorcode = enum_.ERROR_REQUIRED_FIELD), //este error no cuadra
+        (message = 'id does not exist'),
+        (statuscode = enum_.CODE_UNPROCESSABLE_ENTITY);
     }
     response = await magic.ResponseService(status, errorcode, message, data);
     return res.status(statuscode).send(response);

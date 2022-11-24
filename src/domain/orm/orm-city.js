@@ -36,3 +36,22 @@ exports.Create = async (
     return await { err: { code: 123, message: error } };
   }
 };
+
+exports.Delete = async (id) => {
+  try {
+    /* const id = data._id; */
+    return await conn.db.connMongo.City.findByIdAndDelete(id);
+  } catch (error) {
+    magic.LogDanger('Cannot Delete city', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.Update = async (id, city) => {
+  try {
+    return await conn.db.connMongo.City.findByIdAndUpdate(id, city);
+  } catch (error) {
+    magic.LogDanger('Cannot Update city', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
