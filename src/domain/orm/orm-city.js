@@ -60,7 +60,29 @@ exports.GetById = async (id) => {
   try {
     return await conn.db.connMongo.City.findById(id).populate('places');
   } catch (error) {
-    magic.LogDanger('Cannot get the city', error);
+    magic.LogDanger('Cannot get the city its ID', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.GetByName = async (name) => {
+  try {
+    return await conn.db.connMongo.City.findOne({ name: name }).populate(
+      'places'
+    );
+  } catch (error) {
+    magic.LogDanger('Cannot get the city by its name', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.GetByCountry = async (country) => {
+  try {
+    return await conn.db.connMongo.City.find({ country: country }).populate(
+      'places'
+    );
+  } catch (error) {
+    magic.LogDanger('Cannot get the city by its country', error);
     return await { err: { code: 123, message: error } };
   }
 };

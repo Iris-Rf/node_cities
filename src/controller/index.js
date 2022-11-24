@@ -10,6 +10,8 @@ router.post('/cities', cities.Create);
 router.delete('/cities/:id', cities.Delete);
 router.patch('/cities/:id', cities.Update);
 router.get('/cities/:id', cities.GetById);
+router.get('/cities/city/:name', cities.GetByName);
+router.get('/cities/country/:country', cities.GetByCountry);
 router.get('/comments', comments.GetAll);
 router.post('/comments', comments.Create);
 router.get('/places', places.GetAll);
