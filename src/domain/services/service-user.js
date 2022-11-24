@@ -226,7 +226,7 @@ exports.GetByName = async (req, res) => {
   try {
     const { name } = req.params;
     let respOrm = await ormUser.GetByName(name);
-   
+
     if (respOrm.err) {
       (status = 'Failure'),
         (errorcode = respOrm.err.code),
@@ -248,5 +248,49 @@ exports.GetByName = async (req, res) => {
       ''
     );
     return res.status(enum_.CODE_INTERNAL_SERVER_ERROR).send(response);
+  }
+};
+
+exports.Login = async (req, res) => {
+  let status = 'Success',
+    errorcode = '',
+    message = '',
+    data = '',
+    statuscode = 0,
+    response = {};
+  try {
+    const Name = req.body.name;
+    const Nickname = req.body.nickname;
+    const Email = req.body.email;
+    const Password = req.body.password;
+
+    if (Name && Nickname && Email && Password) {
+      let respOrm = await ormUser.Login(Nickname, Password, req);
+      console.log('respormmmm' + respOrm);
+      if (respOrm.err) {
+        (status = 'Failure'),
+          (errorcode = respOrm.err.code),
+          (message = respOrm.err.messsage),
+          (statuscode = enum_.CODE_BAD_REQUEST);
+      } else {
+        (message = 'User logged in'),
+          (data = respOrm),
+          (statuscode = enum_.CODE_OK);
+      }
+    } else {
+      (status = 'Failure'),
+        (errorcode = enum_.ERROR_REQUIRED_FIELD),
+        (message = 'All fields are required'),
+        (statuscode = enum_.CODE_BAD_REQUEST);
+    }
+    response = await magic.ResponseService(status, errorcode, message, data);
+    return res.status(statuscode).send(response);
+  } catch (err) {
+    console.log('err = ', err);
+    return res
+      .status(enum_.CODE_INTERNAL_SERVER_ERROR)
+      .send(
+        await magic.ResponseService('Failure', enum_.CRASH_LOGIC, 'err', '')
+      );
   }
 };

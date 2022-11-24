@@ -1,6 +1,8 @@
 //REVISADO OK
 const conn = require('../repositories/mongo.repository');
 const magic = require('../../utils/magic');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.GetAll = async () => {
   try {
@@ -68,9 +70,44 @@ exports.GetById = async (id) => {
 
 exports.GetByName = async (name) => {
   try {
-    return await conn.db.connMongo.User.findOne({ name: name }).populate('comments');
+    return await conn.db.connMongo.User.findOne({ name: name }).populate(
+      'comments'
+    );
   } catch (error) {
     magic.LogDanger('Cannot get the user by its name', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.Login = async (nickname, password, req) => {
+  try {
+    const userInfo = await conn.db.connMongo.User.findOne({
+      nickname: nickname,
+    });
+    console.log('userinfo password:    ' + userInfo.password);
+    console.log('la password :    ' + password);
+
+    if (password == userInfo.password) {
+      /* userInfo.password = null; */ //manchamos la password ya existente
+      const token = jwt.sign(
+        {
+          id: userInfo._id,
+          name: userInfo.name,
+          nickname: userInfo.nickname,
+          email: userInfo.email,
+        },
+        req.app.get('secretKey'),
+        { expiresIn: '10h' }
+      );
+      return {
+        user: userInfo,
+        token: token,
+      };
+    } else {
+      return console.log('Incorrect password');
+    }
+  } catch (error) {
+    magic.LogDanger('Cannot log in the user', error);
     return await { err: { code: 123, message: error } };
   }
 };
