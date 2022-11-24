@@ -9,6 +9,7 @@ router.get('/cities', cities.GetAll);
 router.post('/cities', cities.Create);
 router.delete('/cities/:id', cities.Delete);
 router.patch('/cities/:id', cities.Update);
+router.get('/cities/:id', cities.GetById);
 router.get('/comments', comments.GetAll);
 router.post('/comments', comments.Create);
 router.get('/places', places.GetAll);

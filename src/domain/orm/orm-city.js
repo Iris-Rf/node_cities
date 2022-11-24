@@ -55,3 +55,12 @@ exports.Update = async (id, city) => {
     return await { err: { code: 123, message: error } };
   }
 };
+
+exports.GetById = async (id) => {
+  try {
+    return await conn.db.connMongo.City.findById(id).populate('places');
+  } catch (error) {
+    magic.LogDanger('Cannot get the city', error);
+    return await { err: { code: 123, message: error } };
+  }
+};

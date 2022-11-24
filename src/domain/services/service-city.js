@@ -176,3 +176,39 @@ exports.Update = async (req, res) => {
       );
   }
 };
+
+//get by id
+exports.GetById = async (req, res) => {
+  let status = 'Success';
+  let errorcode = '';
+  let message = '';
+  let data = '';
+  let statuscode = 0;
+  let response = {};
+  try {
+    const { id } = req.params;
+
+    let respOrm = await ormCity.GetById(id);
+    if (respOrm.err) {
+      (status = 'Failure'),
+        (errorcode = respOrm.err.code),
+        (message = respOrm.err.message),
+        (statuscode = enum_.CODE_BAD_REQUEST);
+    } else {
+      (message = 'Success getting the city'),
+        (data = respOrm),
+        (statuscode = data ? enum_.CODE_OK : enum_.CODE_NO_CONTENT);
+    }
+    response = await magic.ResponseService(status, errorcode, message, data);
+    return res.status(statuscode).send(response);
+  } catch (error) {
+    magic.LogDanger('error: ', error);
+    response = await magic.ResponseService(
+      'Failure',
+      enum_.CODE_BAD_REQUEST,
+      error,
+      ''
+    );
+    return res.status(enum_.CODE_INTERNAL_SERVER_ERROR).send(response);
+  }
+};
