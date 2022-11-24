@@ -21,8 +21,16 @@ router.get('/comments/author/:authorId', comments.GetByAuthorId);
 
 router.get('/places', places.GetAll);
 router.post('/places', places.Create);
+router.delete('/places/:id', places.Delete);
+router.patch('/places/:id', places.Update);
+router.get('/places/:id', places.GetById);
+router.get('/places/place/:name', places.GetByName);
 
 router.get('/users', users.GetAll);
 router.post('/users', users.Create);
+router.delete('/users/:id', users.Delete);
+router.patch('/users/:id', users.Update);
+router.get('/users/:id', users.GetById);
+router.get('/users/user/:name', users.GetByName);
 
 module.exports = router;

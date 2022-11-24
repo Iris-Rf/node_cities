@@ -38,3 +38,39 @@ exports.Create = async (
     return await { err: { code: 123, message: error } };
   }
 };
+
+exports.Delete = async (id) => {
+  try {
+    return await conn.db.connMongo.User.findByIdAndDelete(id);
+  } catch (error) {
+    magic.LogDanger('Cannot Delete user', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.Update = async (id, user) => {
+  try {
+    return await conn.db.connMongo.User.findByIdAndUpdate(id, user);
+  } catch (error) {
+    magic.LogDanger('Cannot Update user', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.GetById = async (id) => {
+  try {
+    return await conn.db.connMongo.User.findById(id).populate('comments');
+  } catch (error) {
+    magic.LogDanger('Cannot get the user by its ID', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.GetByName = async (name) => {
+  try {
+    return await conn.db.connMongo.User.findOne({ name: name }).populate('comments');
+  } catch (error) {
+    magic.LogDanger('Cannot get the user by its name', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
