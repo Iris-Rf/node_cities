@@ -3,7 +3,7 @@
 module.exports = (db) => {
   const citySchema = new db.Schema(
     {
-      name: { type: String, required: true },
+      name: { type: String, required: true, unique: true },
       country: { type: String, required: true },
       population: { type: String, required: true },
       mapImage: { type: String },

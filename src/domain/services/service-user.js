@@ -49,16 +49,17 @@ exports.Create = async (req, res) => {
     const Password = req.body.password;
     const Avatar = req.body.avatar;
     const Role = req.body.role;
-    /* const Comments = req.body.comments; */
+    const Comments = req.body.comments;
 
-    if (Name && Nickname && Email && Password && Avatar && Role) {
+    if (Name && Nickname && Email && Password && Avatar && Role && Comments) {
       let respOrm = await ormUser.Create(
         Name,
         Nickname,
         Email,
         Password,
         Avatar,
-        Role
+        Role,
+        Comments
       );
       if (respOrm.err) {
         (status = 'Failure'),
@@ -66,7 +67,9 @@ exports.Create = async (req, res) => {
           (message = respOrm.err.messsage),
           (statuscode = enum_.CODE_BAD_REQUEST);
       } else {
-        (message = 'User created'), (statuscode = enum_.CODE_CREATED);
+        (message = 'User created'),
+          (data = respOrm),
+          (statuscode = enum_.CODE_CREATED);
       }
     } else {
       (status = 'Failure'),

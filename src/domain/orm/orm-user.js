@@ -4,8 +4,8 @@ const magic = require('../../utils/magic');
 
 exports.GetAll = async () => {
   try {
-    // return await conn.db.connMongo.City.find().populate("city");
-    return await conn.db.connMongo.User.find();
+    /*     return await conn.db.connMongo.City.find().populate('city'); */
+    return await conn.db.connMongo.User.find().populate('comments');
   } catch (error) {
     magic.LogDanger('Cannot getAll users', error);
     return await { err: { code: 123, message: error } };
@@ -18,8 +18,8 @@ exports.Create = async (
   Email,
   Password,
   Avatar,
-  Role
-  /* Comments */
+  Role,
+  Comments
 ) => {
   try {
     const data = await new conn.db.connMongo.User({
@@ -29,7 +29,7 @@ exports.Create = async (
       password: Password,
       avatar: Avatar,
       role: Role,
-      /*  comments: Comments, */
+      comments: Comments,
     });
     data.save();
     return true;

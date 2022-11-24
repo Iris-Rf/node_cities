@@ -4,8 +4,7 @@ const magic = require('../../utils/magic');
 
 exports.GetAll = async () => {
   try {
-    // return await conn.db.connMongo.City.find().populate("city");
-    return await conn.db.connMongo.Comment.find()
+    return await conn.db.connMongo.Comment.find().populate('author');
   } catch (error) {
     magic.LogDanger('Cannot getAll comments', error);
     return await { err: { code: 123, message: error } };
@@ -15,9 +14,9 @@ exports.GetAll = async () => {
 exports.Create = async (title, text, author) => {
   try {
     const data = await new conn.db.connMongo.Comment({
-     title: title,
-     text: text,
-     author: author
+      title: title,
+      text: text,
+      author: author,
     });
     data.save();
     return true;

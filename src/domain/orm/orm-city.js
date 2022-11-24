@@ -5,14 +5,21 @@ const magic = require('../../utils/magic');
 exports.GetAll = async () => {
   try {
     // return await conn.db.connMongo.City.find().populate("city");
-    return await conn.db.connMongo.City.find()
+    return await conn.db.connMongo.City.find().populate('places');
   } catch (error) {
     magic.LogDanger('Cannot getAll cities', error);
     return await { err: { code: 123, message: error } };
   }
 };
 
-exports.Create = async (name, country, population, mapImage, history, places) => {
+exports.Create = async (
+  name,
+  country,
+  population,
+  mapImage,
+  history,
+  places
+) => {
   try {
     const data = await new conn.db.connMongo.City({
       name: name,
@@ -20,7 +27,7 @@ exports.Create = async (name, country, population, mapImage, history, places) =>
       population: population,
       mapImage: mapImage,
       history: history,
-      places: places
+      places: places,
     });
     data.save();
     return true;
