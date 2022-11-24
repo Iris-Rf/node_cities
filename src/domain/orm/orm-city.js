@@ -78,9 +78,10 @@ exports.GetByName = async (name) => {
 
 exports.GetByCountry = async (country) => {
   try {
-    return await conn.db.connMongo.City.find({ country: country }).populate(
+    const filterByCountry = await conn.db.connMongo.City.find().populate(
       'places'
     );
+    return await filterByCountry.filter((c) => c.country == country);
   } catch (error) {
     magic.LogDanger('Cannot get the city by its country', error);
     return await { err: { code: 123, message: error } };
