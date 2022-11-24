@@ -25,3 +25,30 @@ exports.Create = async (title, text, author) => {
     return await { err: { code: 123, message: error } };
   }
 };
+
+exports.Delete = async (id) => {
+  try {
+    return await conn.db.connMongo.Comment.findByIdAndDelete(id);
+  } catch (error) {
+    magic.LogDanger('Cannot Delete comment', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.Update = async (id, comment) => {
+  try {
+    return await conn.db.connMongo.Comment.findByIdAndUpdate(id, comment);
+  } catch (error) {
+    magic.LogDanger('Cannot Update comment', error);
+    return await { err: { code: 123, message: error } };
+  }
+};
+
+exports.GetByAuthorId = async (authorId) => {
+  try {
+    return await conn.db.connMongo.Comment.find({ author: authorId });
+  } catch (error) {
+    magic.LogDanger('Cannot Update comment', error);
+    return await { err: { code: 123, message: error } };
+  }
+};

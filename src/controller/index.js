@@ -12,10 +12,16 @@ router.patch('/cities/:id', cities.Update);
 router.get('/cities/:id', cities.GetById);
 router.get('/cities/city/:name', cities.GetByName);
 router.get('/cities/country/:country', cities.GetByCountry);
+
 router.get('/comments', comments.GetAll);
 router.post('/comments', comments.Create);
+router.delete('/comments/:id', comments.Delete);
+router.patch('/comments/:id', comments.Update);
+router.get('/comments/author/:authorId', comments.GetByAuthorId);
+
 router.get('/places', places.GetAll);
 router.post('/places', places.Create);
+
 router.get('/users', users.GetAll);
 router.post('/users', users.Create);
 

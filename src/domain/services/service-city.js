@@ -148,7 +148,7 @@ exports.Update = async (req, res) => {
       _id: id,
     };
 
-    if (id) {
+    if (id && updatedCity) {
       let respOrm = await ormCity.Update(id, updatedCity);
       console.log(respOrm);
       if (respOrm.err) {

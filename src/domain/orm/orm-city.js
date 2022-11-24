@@ -39,7 +39,6 @@ exports.Create = async (
 
 exports.Delete = async (id) => {
   try {
-    /* const id = data._id; */
     return await conn.db.connMongo.City.findByIdAndDelete(id);
   } catch (error) {
     magic.LogDanger('Cannot Delete city', error);
