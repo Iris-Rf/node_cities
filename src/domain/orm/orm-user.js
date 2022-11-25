@@ -84,8 +84,6 @@ exports.Login = async (nickname, password, req) => {
     const userInfo = await conn.db.connMongo.User.findOne({
       nickname: nickname,
     });
-    console.log('userinfo password:    ' + userInfo.password);
-    console.log('la password :    ' + password);
 
     if (password == userInfo.password) {
       /* userInfo.password = null; */ //manchamos la password ya existente
@@ -95,6 +93,7 @@ exports.Login = async (nickname, password, req) => {
           name: userInfo.name,
           nickname: userInfo.nickname,
           email: userInfo.email,
+          role: userInfo.role,
         },
         req.app.get('secretKey'),
         { expiresIn: '10h' }

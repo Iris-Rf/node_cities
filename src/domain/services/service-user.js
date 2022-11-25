@@ -259,12 +259,10 @@ exports.Login = async (req, res) => {
     statuscode = 0,
     response = {};
   try {
-    const Name = req.body.name;
     const Nickname = req.body.nickname;
-    const Email = req.body.email;
     const Password = req.body.password;
 
-    if (Name && Nickname && Email && Password) {
+    if (Nickname && Password) {
       let respOrm = await ormUser.Login(Nickname, Password, req);
       console.log('respormmmm' + respOrm);
       if (respOrm.err) {
