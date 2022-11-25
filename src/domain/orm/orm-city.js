@@ -39,12 +39,10 @@ exports.Create = async (name, country, population, history, places, req) => {
 exports.Delete = async (id) => {
   try {
     const deletedCity = await conn.db.connMongo.City.findById(id);
-    console.log('esta es la deleted city ' + deletedCity);
-    console.log('esta es la imagen de la deleted city ' + deletedCity.mapImage);
     if (deletedCity.mapImage) {
       await deleteFile(deletedCity.mapImage);
     }
-    return await conn.db.connMongo.City.findByIdAndDelete(id);
+    return await conn.db.connMongo.City.deleteOne({ _id: id });
   } catch (error) {
     magic.LogDanger('Cannot Delete city', error);
     return await { err: { code: 123, message: error } };
@@ -53,15 +51,12 @@ exports.Delete = async (id) => {
 
 exports.Update = async (id, city, req) => {
   try {
-    const updatedCity = await conn.db.connMongo.City.findByIdAndUpdate(
-      id,
-      city
-    );
-    if (req.file) {
+    const updatedCity = await conn.db.connMongo.City.findById(id);
+    if (updatedCity.mapImage) {
       deleteFile(updatedCity.mapImage);
-      updatedCity.mapImage = req.file.path;
+      console.log('cityimage:  ' + city.mapImage);
     }
-    return updatedCity;
+    return await conn.db.connMongo.City.findByIdAndUpdate(id, city);
   } catch (error) {
     magic.LogDanger('Cannot Update city', error);
     return await { err: { code: 123, message: error } };

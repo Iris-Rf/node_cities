@@ -141,7 +141,7 @@ exports.Update = async (req, res) => {
       name: req.body.name,
       country: req.body.country,
       population: req.body.population,
-      mapImage: req.body.mapImage,
+      mapImage: req.file.path,
       history: req.body.history,
       places: req.body.places,
       _id: id,
@@ -149,7 +149,7 @@ exports.Update = async (req, res) => {
 
     if (id && updatedCity) {
       let respOrm = await ormCity.Update(id, updatedCity, req);
-      console.log(respOrm);
+
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),
