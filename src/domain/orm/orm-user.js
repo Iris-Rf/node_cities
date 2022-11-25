@@ -89,7 +89,7 @@ exports.Login = async (nickname, password, req) => {
     });
 
     if (bcrypt.compareSync(req.body.password, userInfo.password)) {
-      /*  if (password == userInfo.password) */ userInfo.password = null; //manchamos la password ya existente
+      userInfo.password = null; //manchamos la password ya existente
       const token = jwt.sign(
         {
           id: userInfo._id,

@@ -1,6 +1,7 @@
 const magic = require('../../utils/magic');
 const enum_ = require('../../utils/enum');
 const ormCity = require('../orm/orm-city');
+const { deleteFile } = require('../../middlewares/delete-file');
 
 exports.GetAll = async (req, res) => {
   let status = 'Success';
@@ -47,19 +48,17 @@ exports.Create = async (req, res) => {
     const name = req.body.name;
     const country = req.body.country;
     const population = req.body.population;
-    const mapImage = req.body.mapImage;
     const history = req.body.history;
     const places = req.body.places;
 
-    // Verificar si deben ir todos las variables o únicamente las requeridas
-    if (name && country && population && mapImage && history && places) {
+    if (name && country && population && history && places) {
       let respOrm = await ormCity.Create(
         name,
         country,
         population,
-        mapImage,
         history,
-        places
+        places,
+        req
       );
       if (respOrm.err) {
         (status = 'Failure'),
@@ -100,6 +99,9 @@ exports.Delete = async (req, res) => {
 
     if (id) {
       let respOrm = await ormCity.Delete(id);
+      if (respOrm.mapImage) {
+        deleteFile(respOrm.mapImage);
+      }
       console.log(respOrm);
       if (respOrm.err) {
         (status = 'Failure'),

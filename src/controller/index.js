@@ -6,9 +6,10 @@ const places = require('../domain/services/service-place');
 const users = require('../domain/services/service-user');
 const { isAuth } = require('../middlewares/auth.middleware');
 const { isAdmin } = require('../middlewares/admin.middleware');
+const { upload } = require('../middlewares/file');
 
 router.get('/cities', cities.GetAll);
-router.post('/cities', [isAdmin], cities.Create);
+router.post('/cities', [isAdmin], upload.single('mapImage'), cities.Create);
 router.delete('/cities/:id', [isAdmin], cities.Delete);
 router.patch('/cities/:id', [isAdmin], cities.Update);
 router.get('/cities/:id', cities.GetById);

@@ -6,6 +6,7 @@ const comment = require('../entities/entity-comment');
 const place = require('../entities/entity-place');
 const user = require('../entities/entity-user');
 const dotenv = require('dotenv');
+const { setUpCloudinary } = require('../../helpers/cloudinary');
 
 dotenv.config();
 
@@ -25,6 +26,9 @@ if (config.db.mongodb && config.db.mongodb.length > 0) {
     db[c.nameconn].User = user(mongoose);
   });
   exports.db = db;
+
+  setUpCloudinary();
+
   magic.LogInfo('Conectado a la base de datos');
 } else {
   magic.LogDanger('No existe la base de datos');

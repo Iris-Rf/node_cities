@@ -28,7 +28,6 @@ const isAdmin = (req, res, next) => {
 
   if (token.role === 'admin') {
     req.authority = authority;
-
     next();
   } else {
     next(setError(401, 'Not authorized'));

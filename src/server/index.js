@@ -13,4 +13,6 @@ app.set('secretKey', process.env.SECRET_KEY_JWT);
 
 require('../routes')(app);
 
+app.disable('x-powered-by');
+
 module.exports = app;
