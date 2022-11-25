@@ -34,6 +34,6 @@ router.delete('/users/:id', [isAdmin], users.Delete);
 router.patch('/users/:id', [isAuth], users.Update);
 router.get('/users/:id', [isAdmin], users.GetById);
 router.get('/users/user/:name', [isAdmin], users.GetByName);
-router.post('/users/user/login', [isAdmin], users.Login);
+router.post('/users/user/login', users.Login);
 
 module.exports = router;

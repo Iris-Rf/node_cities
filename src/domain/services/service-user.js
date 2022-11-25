@@ -264,7 +264,7 @@ exports.Login = async (req, res) => {
 
     if (Nickname && Password) {
       let respOrm = await ormUser.Login(Nickname, Password, req);
-      console.log('respormmmm' + respOrm);
+
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),

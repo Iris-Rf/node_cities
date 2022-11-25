@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 
 exports.GetAll = async () => {
   try {
-    /*     return await conn.db.connMongo.City.find().populate('city'); */
     return await conn.db.connMongo.User.find().populate('comments');
   } catch (error) {
     magic.LogDanger('Cannot getAll users', error);
@@ -33,7 +32,11 @@ exports.Create = async (
       role: Role,
       comments: Comments,
     });
+
+    data.password = bcrypt.hashSync(data.password, 10);
+
     data.save();
+
     return true;
   } catch (error) {
     magic.LogDanger('Cannot Create users', error);
@@ -85,8 +88,8 @@ exports.Login = async (nickname, password, req) => {
       nickname: nickname,
     });
 
-    if (password == userInfo.password) {
-      /* userInfo.password = null; */ //manchamos la password ya existente
+    if (bcrypt.compareSync(req.body.password, userInfo.password)) {
+      /*  if (password == userInfo.password) */ userInfo.password = null; //manchamos la password ya existente
       const token = jwt.sign(
         {
           id: userInfo._id,
