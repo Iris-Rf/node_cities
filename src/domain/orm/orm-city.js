@@ -1,6 +1,7 @@
 // REVISADO OK
 const conn = require('../repositories/mongo.repository');
 const magic = require('../../utils/magic');
+const { deleteFile } = require('../../middlewares/delete-file');
 
 exports.GetAll = async () => {
   try {
@@ -37,6 +38,12 @@ exports.Create = async (name, country, population, history, places, req) => {
 
 exports.Delete = async (id) => {
   try {
+    const deletedCity = await conn.db.connMongo.City.findById(id);
+    console.log('esta es la deleted city ' + deletedCity);
+    console.log('esta es la imagen de la deleted city ' + deletedCity.mapImage);
+    if (deletedCity.mapImage) {
+      await deleteFile(deletedCity.mapImage);
+    }
     return await conn.db.connMongo.City.findByIdAndDelete(id);
   } catch (error) {
     magic.LogDanger('Cannot Delete city', error);
@@ -44,9 +51,17 @@ exports.Delete = async (id) => {
   }
 };
 
-exports.Update = async (id, city) => {
+exports.Update = async (id, city, req) => {
   try {
-    return await conn.db.connMongo.City.findByIdAndUpdate(id, city);
+    const updatedCity = await conn.db.connMongo.City.findByIdAndUpdate(
+      id,
+      city
+    );
+    if (req.file) {
+      deleteFile(updatedCity.mapImage);
+      updatedCity.mapImage = req.file.path;
+    }
+    return updatedCity;
   } catch (error) {
     magic.LogDanger('Cannot Update city', error);
     return await { err: { code: 123, message: error } };

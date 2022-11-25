@@ -99,9 +99,6 @@ exports.Delete = async (req, res) => {
 
     if (id) {
       let respOrm = await ormCity.Delete(id);
-      if (respOrm.mapImage) {
-        deleteFile(respOrm.mapImage);
-      }
       console.log(respOrm);
       if (respOrm.err) {
         (status = 'Failure'),
@@ -151,7 +148,7 @@ exports.Update = async (req, res) => {
     };
 
     if (id && updatedCity) {
-      let respOrm = await ormCity.Update(id, updatedCity);
+      let respOrm = await ormCity.Update(id, updatedCity, req);
       console.log(respOrm);
       if (respOrm.err) {
         (status = 'Failure'),
