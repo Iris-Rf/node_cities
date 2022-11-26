@@ -9,9 +9,14 @@ const { isAdmin } = require('../middlewares/admin.middleware');
 const { upload } = require('../middlewares/file');
 
 router.get('/cities', cities.GetAll);
-router.post('/cities', [isAdmin], upload.single('mapImage'), cities.Create);
+router.post('/cities', upload.single('mapImage'), cities.Create);
 router.delete('/cities/:id', [isAdmin], cities.Delete);
-router.patch('/cities/updateCity/:id', [isAdmin],upload.single('mapImage'), cities.Update);
+router.patch(
+  '/cities/updateCity/:id',
+  [isAdmin],
+  upload.single('mapImage'),
+  cities.Update
+);
 router.get('/cities/:id', cities.GetById);
 router.get('/cities/city/:name', cities.GetByName);
 router.get('/cities/country/:country', cities.GetByCountry);
@@ -23,16 +28,16 @@ router.patch('/comments/:id', [isAuth], comments.Update);
 router.get('/comments/author/:authorId', comments.GetByAuthorId);
 
 router.get('/places', places.GetAll);
-router.post('/places', [isAdmin],upload.single('image'), places.Create);
+router.post('/places', [isAdmin], upload.single('image'), places.Create);
 router.delete('/places/:id', [isAdmin], places.Delete);
-router.patch('/places/:id', [isAdmin],upload.single('image'), places.Update);
+router.patch('/places/:id', [isAdmin], upload.single('image'), places.Update);
 router.get('/places/:id', places.GetById);
 router.get('/places/place/:name', places.GetByName);
 
 router.get('/users', [isAdmin], users.GetAll);
-router.post('/users',upload.single('avatar'), users.Create);
+router.post('/users', upload.single('avatar'), users.Create);
 router.delete('/users/:id', [isAdmin], users.Delete);
-router.patch('/users/:id', [isAuth],upload.single('avatar'), users.Update);
+router.patch('/users/:id', [isAuth], upload.single('avatar'), users.Update);
 router.get('/users/:id', [isAdmin], users.GetById);
 router.get('/users/user/:name', [isAdmin], users.GetByName);
 router.post('/users/user/login', users.Login);
