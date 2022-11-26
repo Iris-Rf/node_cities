@@ -2,6 +2,8 @@ const puppeteer = require("puppeteer");
 const fs = require("fs");
 const http = require("http");
 
+//ayyy dios mio
+
 const cityInfoJSON = {};
 
 const browserURL = async (city) => {
