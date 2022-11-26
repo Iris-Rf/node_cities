@@ -47,7 +47,7 @@ exports.Create = async (req, res) => {
     const image = req.body.image;
     const comments = req.body.comments;
     if (name && image && comments) {
-      let respOrm = await ormPlace.Create(name, image, comments);
+      let respOrm = await ormPlace.Create(name, image, comments, req);
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),
@@ -134,7 +134,7 @@ exports.Update = async (req, res) => {
     };
 
     if (id && updatedPlace) {
-      let respOrm = await ormPlace.Update(id, updatedPlace);
+      let respOrm = await ormPlace.Update(id, updatedPlace, req);
       console.log(respOrm);
       if (respOrm.err) {
         (status = 'Failure'),

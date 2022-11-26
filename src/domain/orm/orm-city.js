@@ -49,14 +49,16 @@ exports.Delete = async (id) => {
   }
 };
 
-exports.Update = async (id, city, req) => {
+exports.Update = async (id, updatedCity, req) => {
   try {
-    const updatedCity = await conn.db.connMongo.City.findById(id);
-    if (updatedCity.mapImage) {
-      deleteFile(updatedCity.mapImage);
-      console.log('cityimage:  ' + city.mapImage);
-    }
-    return await conn.db.connMongo.City.findByIdAndUpdate(id, city);
+    const olderCity = await conn.db.connMongo.City.findById(id);
+
+    olderCity.mapImage && deleteFile(olderCity.mapImage);
+    req.file
+      ? (updatedCity.mapImage = req.file.path)
+      : (updatedCity.mapImage = "there's no image");
+
+    return await conn.db.connMongo.City.findByIdAndUpdate(id, updatedCity);
   } catch (error) {
     magic.LogDanger('Cannot Update city', error);
     return await { err: { code: 123, message: error } };

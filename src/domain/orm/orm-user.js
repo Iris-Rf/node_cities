@@ -3,6 +3,7 @@ const conn = require('../repositories/mongo.repository');
 const magic = require('../../utils/magic');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { deleteFile } = require('../../middlewares/delete-file');
 
 exports.GetAll = async () => {
   try {
@@ -20,7 +21,8 @@ exports.Create = async (
   Password,
   Avatar,
   Role,
-  Comments
+  Comments,
+  req
 ) => {
   try {
     const data = await new conn.db.connMongo.User({
@@ -32,6 +34,12 @@ exports.Create = async (
       role: Role,
       comments: Comments,
     });
+
+    if (req.file) {
+      data.image = req.file.path;
+    } else {
+      data.image = "there's no image";
+    }
 
     data.password = bcrypt.hashSync(data.password, 10);
 
@@ -46,16 +54,25 @@ exports.Create = async (
 
 exports.Delete = async (id) => {
   try {
-    return await conn.db.connMongo.User.findByIdAndDelete(id);
+    const deletedUser = await conn.db.connMongo.User.findById(id);
+    if (deletedUser.image) {
+     deleteFile(deletedUser.image);
+    }
+    return await conn.db.connMongo.User.deleteOne({ _id: id });
   } catch (error) {
     magic.LogDanger('Cannot Delete user', error);
     return await { err: { code: 123, message: error } };
   }
 };
 
-exports.Update = async (id, user) => {
+exports.Update = async (id, updatedUser) => {
   try {
-    return await conn.db.connMongo.User.findByIdAndUpdate(id, user);
+    const olderUser = await conn.db.connMongo.User.findById(id);
+    olderUser.mapImage && deleteFile(olderUser.mapImage);
+    req.file
+      ? (updatedUser.mapImage = req.file.path)
+      : (updatedUser.mapImage = "there's no image");
+    
   } catch (error) {
     magic.LogDanger('Cannot Update user', error);
     return await { err: { code: 123, message: error } };

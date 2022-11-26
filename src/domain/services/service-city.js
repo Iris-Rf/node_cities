@@ -135,13 +135,12 @@ exports.Update = async (req, res) => {
     statuscode = 0,
     response = {};
   try {
-    const { id } = req.params;
+   const { id } = req.params;
 
-    const updatedCity = {
+    const updatedCity =  {
       name: req.body.name,
       country: req.body.country,
       population: req.body.population,
-      mapImage: req.file.path,
       history: req.body.history,
       places: req.body.places,
       _id: id,
