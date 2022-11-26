@@ -13,11 +13,10 @@ exports.GetAll = async () => {
   }
 };
 
-exports.Create = async (name, image, comments, req) => {
+exports.Create = async (name, comments, req) => {
   try {
     const data = await new conn.db.connMongo.Place({
       name: name,
-      image: image,
       comments: comments,
     });
     if (req.file) {
@@ -49,10 +48,10 @@ exports.Delete = async (id) => {
 exports.Update = async (id, updatedPlace, req) => {
   try {
     const olderPlace = await conn.db.connMongo.Place.findById(id);
-    olderPlace.mapImage && deleteFile(olderCity.mapImage);
+    olderPlace.image && deleteFile(olderPlace.image);
     req.file
-      ? (updatedPlace.mapImage = req.file.path)
-      : (updatedPLace.mapImage = "there's no image");
+      ? (updatedPlace.image = req.file.path)
+      : (updatedPLace.image = "there's no image");
     return await conn.db.connMongo.Place.findByIdAndUpdate(id, updatedPlace);
   } catch (error) {
     magic.LogDanger('Cannot Update place', error);

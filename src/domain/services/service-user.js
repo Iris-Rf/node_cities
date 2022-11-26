@@ -151,7 +151,7 @@ exports.Update = async (req, res) => {
     };
 
     if (id && updatedUser) {
-      let respOrm = await ormUser.Update(id, updatedUser);
+      let respOrm = await ormUser.Update(id, updatedUser, req);
       console.log(respOrm);
       if (respOrm.err) {
         (status = 'Failure'),

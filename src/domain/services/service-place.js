@@ -46,8 +46,8 @@ exports.Create = async (req, res) => {
     const name = req.body.name;
     const image = req.body.image;
     const comments = req.body.comments;
-    if (name && image && comments) {
-      let respOrm = await ormPlace.Create(name, image, comments, req);
+    if (name && comments) {
+      let respOrm = await ormPlace.Create(name, comments, req);
       if (respOrm.err) {
         (status = 'Failure'),
           (errorcode = respOrm.err.code),

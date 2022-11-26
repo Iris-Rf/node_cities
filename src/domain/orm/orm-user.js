@@ -55,8 +55,8 @@ exports.Create = async (
 exports.Delete = async (id) => {
   try {
     const deletedUser = await conn.db.connMongo.User.findById(id);
-    if (deletedUser.image) {
-     deleteFile(deletedUser.image);
+    if (deletedUser.avatar) {
+     deleteFile(deletedUser.avatar);
     }
     return await conn.db.connMongo.User.deleteOne({ _id: id });
   } catch (error) {
@@ -65,14 +65,14 @@ exports.Delete = async (id) => {
   }
 };
 
-exports.Update = async (id, updatedUser) => {
+exports.Update = async (id, updatedUser, req) => {
   try {
     const olderUser = await conn.db.connMongo.User.findById(id);
-    olderUser.mapImage && deleteFile(olderUser.mapImage);
+    olderUser.avatar && deleteFile(olderUser.avatar);
     req.file
-      ? (updatedUser.mapImage = req.file.path)
-      : (updatedUser.mapImage = "there's no image");
-    
+      ? (updatedUser.avatar = req.file.path)
+      : (updatedUser.avatar = "there's no image");
+    return await conn.db.connMongo.User.findByIdAndUpdate(id, updatedUser);
   } catch (error) {
     magic.LogDanger('Cannot Update user', error);
     return await { err: { code: 123, message: error } };
