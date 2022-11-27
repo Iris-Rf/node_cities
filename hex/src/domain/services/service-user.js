@@ -42,6 +42,8 @@ exports.Create = async (req, res) => {
     data = '',
     statuscode = 0,
     response = {};
+
+  console.log('req de service: ' + req);
   try {
     const Name = req.body.name;
     const Nickname = req.body.nickname;
@@ -50,7 +52,6 @@ exports.Create = async (req, res) => {
     /* const Avatar = req.body.avatar; */
     const Role = req.body.role;
     const Comments = req.body.comments;
-
     if (
       Name &&
       Nickname &&
@@ -270,7 +271,7 @@ exports.Login = async (req, res) => {
     const Password = req.body.password;
 
     if (Nickname && Password) {
-      let respOrm = await ormUser.Login(Nickname, Password, req);
+      let respOrm = await ormUser.Login(Nickname, req);
 
       if (respOrm.err) {
         (status = 'Failure'),

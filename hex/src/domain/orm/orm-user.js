@@ -19,7 +19,6 @@ exports.Create = async (
   Nickname,
   Email,
   Password,
-  /* Avatar, */
   Role,
   Comments,
   req
@@ -30,24 +29,25 @@ exports.Create = async (
       nickname: Nickname,
       email: Email,
       password: Password,
-      /* avatar: Avatar, */
       role: Role,
       comments: Comments,
     });
-
-    if (req.file) {
+    console.log('hasta el condicional');
+    /* if (req.file) {
       data.avatar = req.file.path;
+      console.log('data 37: ' + data);
     } else {
       data.avatar = "there's no image";
-    }
-
+      console.log('data 41: ' + data);
+    } */
+    console.log('hasta la passsword');
     data.password = bcrypt.hashSync(data.password, 10);
-
+    console.log('data: ' + data);
     data.save();
 
     return true;
   } catch (error) {
-    magic.LogDanger('Cannot Create users', error);
+    magic.LogDanger('Cannot Create user', error);
     return await { err: { code: 123, message: error } };
   }
 };
@@ -72,6 +72,8 @@ exports.Update = async (id, updatedUser, req) => {
     req.file
       ? (updatedUser.avatar = req.file.path)
       : (updatedUser.avatar = "there's no image");
+
+    updatedUser.password = bcrypt.hashSync(updatedUser.password, 10);
     return await conn.db.connMongo.User.findByIdAndUpdate(id, updatedUser);
   } catch (error) {
     magic.LogDanger('Cannot Update user', error);
@@ -99,14 +101,14 @@ exports.GetByName = async (name) => {
   }
 };
 
-exports.Login = async (nickname, password, req) => {
+exports.Login = async (nickname, req) => {
   try {
     const userInfo = await conn.db.connMongo.User.findOne({
       nickname: nickname,
     });
 
     if (bcrypt.compareSync(req.body.password, userInfo.password)) {
-      userInfo.password = null; //manchamos la password ya existente
+      userInfo.password = null;
       const token = jwt.sign(
         {
           id: userInfo._id,
