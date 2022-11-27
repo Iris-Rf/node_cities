@@ -19,7 +19,7 @@ exports.Create = async (
   Nickname,
   Email,
   Password,
-  Avatar,
+  /* Avatar, */
   Role,
   Comments,
   req
@@ -30,15 +30,15 @@ exports.Create = async (
       nickname: Nickname,
       email: Email,
       password: Password,
-      avatar: Avatar,
+      /* avatar: Avatar, */
       role: Role,
       comments: Comments,
     });
 
     if (req.file) {
-      data.image = req.file.path;
+      data.avatar = req.file.path;
     } else {
-      data.image = "there's no image";
+      data.avatar = "there's no image";
     }
 
     data.password = bcrypt.hashSync(data.password, 10);
@@ -56,7 +56,7 @@ exports.Delete = async (id) => {
   try {
     const deletedUser = await conn.db.connMongo.User.findById(id);
     if (deletedUser.avatar) {
-     deleteFile(deletedUser.avatar);
+      deleteFile(deletedUser.avatar);
     }
     return await conn.db.connMongo.User.deleteOne({ _id: id });
   } catch (error) {
@@ -116,7 +116,7 @@ exports.Login = async (nickname, password, req) => {
           role: userInfo.role,
         },
         req.app.get('secretKey'),
-        { expiresIn: '10h' }
+        { expiresIn: '30h' }
       );
       return {
         user: userInfo,
