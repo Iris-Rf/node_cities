@@ -35,7 +35,7 @@ router.get('/places/:id', places.GetById);
 router.get('/places/place/:name', places.GetByName);
 
 router.get('/users', [isAdmin], users.GetAll);
-router.post('/users', /* upload.single('avatar'), */ users.Create);
+router.post('/users', upload.single('avatar'), users.Create);
 router.delete('/users/:id', [isAdmin], users.Delete);
 router.patch('/users/:id', [isAuth], upload.single('avatar'), users.Update);
 router.get('/users/:id', [isAdmin], users.GetById);

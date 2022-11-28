@@ -1,7 +1,6 @@
 const puppeteer = require("puppeteer");
-const fs = require("fs");
-const http = require("http");
-const dotenv = require("dotenv").config();
+const dotenv = require("dotenv");
+dotenv.config();
 const mongoose = require("mongoose");
 const City = require("./src/city/citySchema");
 const cors = require("cors");

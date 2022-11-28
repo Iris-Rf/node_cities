@@ -32,17 +32,14 @@ exports.Create = async (
       role: Role,
       comments: Comments,
     });
-    console.log('hasta el condicional');
-    /* if (req.file) {
+
+    if (req.file) {
       data.avatar = req.file.path;
-      console.log('data 37: ' + data);
     } else {
       data.avatar = "there's no image";
-      console.log('data 41: ' + data);
-    } */
-    console.log('hasta la passsword');
+    }
+
     data.password = bcrypt.hashSync(data.password, 10);
-    console.log('data: ' + data);
     data.save();
 
     return true;

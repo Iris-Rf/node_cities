@@ -42,30 +42,19 @@ exports.Create = async (req, res) => {
     data = '',
     statuscode = 0,
     response = {};
-
-  console.log('req de service: ' + req);
   try {
     const Name = req.body.name;
     const Nickname = req.body.nickname;
     const Email = req.body.email;
     const Password = req.body.password;
-    /* const Avatar = req.body.avatar; */
     const Role = req.body.role;
     const Comments = req.body.comments;
-    if (
-      Name &&
-      Nickname &&
-      Email &&
-      Password /* && Avatar */ &&
-      Role &&
-      Comments
-    ) {
+    if (Name && Nickname && Email && Password && Role && Comments) {
       let respOrm = await ormUser.Create(
         Name,
         Nickname,
         Email,
         Password,
-        /* Avatar, */
         Role,
         Comments
       );
